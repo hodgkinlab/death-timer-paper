@@ -1,0 +1,55 @@
+﻿time,replicate,genotype,counts,cohort number,condition,PI stain
+0,1,WT,,0,96h wash,
+21,1,WT,,0,96h wash,
+48,1,WT,,0,96h wash,
+72,1,WT,,0,96h wash,
+96,1,WT,1.06028768,0,96h wash,94.5
+110,1,WT,3.27825545,0,96h wash,87.7
+120,1,WT,1.58139138,0,96h wash,52
+134,1,WT,0.43555386,0,96h wash,18.8
+144,1,WT,0.20789305,0,96h wash,10.5
+0,2,WT,,0,96h wash,
+21,2,WT,,0,96h wash,
+48,2,WT,,0,96h wash,
+72,2,WT,,0,96h wash,
+96,2,WT,0.99616296,0,96h wash,98.6
+110,2,WT,2.99168307,0,96h wash,87.5
+120,2,WT,1.37250392,0,96h wash,52.9
+134,2,WT,0.40105066,0,96h wash,19.1
+144,2,WT,0.13762104,0,96h wash,9.75
+0,3,WT,,0,96h wash,
+21,3,WT,,0,96h wash,
+48,3,WT,,0,96h wash,
+72,3,WT,,0,96h wash,
+96,3,WT,0.94354936,0,96h wash,98
+110,3,WT,2.60994817,0,96h wash,87.6
+120,3,WT,1.42433404,0,96h wash,51.7
+134,3,WT,0.41895014,0,96h wash,18.8
+144,3,WT,0.19005384,0,96h wash,9.65
+0,1,BaxBak KO,,0,96h wash,
+21,1,BaxBak KO,,0,96h wash,
+48,1,BaxBak KO,,0,96h wash,
+72,1,BaxBak KO,,0,96h wash,
+96,1,BaxBak KO,0.94527465,0,96h wash,99.1
+110,1,BaxBak KO,1.58984554,0,96h wash,98.7
+120,1,BaxBak KO,2.783932,0,96h wash,98.5
+134,1,BaxBak KO,2.81169454,0,96h wash,98
+144,1,BaxBak KO,3.23238278,0,96h wash,97.3
+0,2,BaxBak KO,,0,96h wash,
+21,2,BaxBak KO,,0,96h wash,
+48,2,BaxBak KO,,0,96h wash,
+72,2,BaxBak KO,,0,96h wash,
+96,2,BaxBak KO,0.99467599,0,96h wash,99.2
+110,2,BaxBak KO,2.19218993,0,96h wash,98.6
+120,2,BaxBak KO,2.35442373,0,96h wash,98.6
+134,2,BaxBak KO,2.28242391,0,96h wash,98
+144,2,BaxBak KO,2.98798099,0,96h wash,97.2
+0,3,BaxBak KO,,0,96h wash,
+21,3,BaxBak KO,,0,96h wash,
+48,3,BaxBak KO,,0,96h wash,
+72,3,BaxBak KO,,0,96h wash,
+96,3,BaxBak KO,1.06004936,0,96h wash,99
+110,3,BaxBak KO,2.73841514,0,96h wash,98.7
+120,3,BaxBak KO,2.78016178,0,96h wash,98.5
+134,3,BaxBak KO,2.40138013,0,96h wash,98
+144,3,BaxBak KO,3.22123206,0,96h wash,96.8
