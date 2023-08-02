@@ -289,11 +289,9 @@ def single_fit(exp,
 
   fn = os.path.join(OUTPUT_DIR, f'{e_label}.{EXPORT_FILE_TYPE}')
   ensemble_fig.savefig(fn)
-  # ensemble_fig.show()
   plt.close()
   fn = os.path.join(OUTPUT_DIR, f'{h_label}.{EXPORT_FILE_TYPE}')
   histogram_fig.savefig(fn)
-  # histogram_fig.show()
   plt.close()
 
   return 0
@@ -398,8 +396,6 @@ def three_way_fit(survival_only=False, ensemble_figs=[None] * 3):
     histogram_fig = plot_histograms_from_weights(parms, weights)
     ensemble_plots[exp.name] = ensemble_fig
     histogram_plots[exp.name] = histogram_fig
-    # ensemble_fig.show()
-    # histogram_fig.show()
 
   return (ensemble_plots, histogram_plots)
 
@@ -416,9 +412,9 @@ def plot_drug_fit_for_condition(experiment, inhf={}, dashes=None, fig=None, labe
 
   f = EnsembleFit(parms)
   f.predict(weights)
-  f.plot(survival_only=True, fig=fig, dashes=dashes, label_prefix=label_prefix)
+  fig = f.plot(logicle=True, ensemble_xlim=[-100, 200], survival_only=False, fig=fig, dashes=dashes, label_prefix=label_prefix)
 
-  return
+  return fig
 
 def vary_protein_list(experiment, fig_name):
   # Determine and plot the error in the fit based on the combination
@@ -472,24 +468,25 @@ def vary_protein_list(experiment, fig_name):
     sns.boxplot(data=df, x='number of proteins', y=f'{error_type} survival error')
     fn = os.path.join(OUTPUT_DIR, f'{fig_name} {error_type}.{EXPORT_FILE_TYPE}')
     plt.savefig(fn)
-    # plt.show()
     plt.close()
 
 
-def plot_S11():
+def plot_all_drug_fits(fig_label='?'):
   experiment = mr_95
 
   parms = get_parms(experiment)
   f = EnsembleFit(parms)
   control_weights = get_or_calculate_weights(f, experiment)
 
-  conditions = ['0.1uM MCL1i', '1uM MCL1i', '0.1uM BCL2i', '1uM BCL2i']
-  fixed_proteins = ['MCL1', 'MCL1', 'BCL2', 'BCL2']
-  panels = ['a', 'b', 'c', 'd']
+  conditions = ['0uM', '0.1uM MCL1i', '1uM MCL1i', '0.1uM BCL2i', '1uM BCL2i']
+  fixed_proteins = [None, 'MCL1', 'MCL1', 'BCL2', 'BCL2']
+  panels = ['c', 'e', 'f', 'j', 'k']
+  survival_fig, _ = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
   for condition, fixed_protein, panel in zip(conditions, fixed_proteins, panels):
     inhf = get_or_calculate_inhibition_factor(condition, experiment)
     fixed_protein_weights = control_weights.copy()
-    fixed_protein_weights[fixed_protein] *= inhf
+    if fixed_protein is not None:
+      fixed_protein_weights[fixed_protein] *= inhf
 
     parms = get_parms(experiment)
     parms.set('condition', condition)
@@ -500,59 +497,25 @@ def plot_S11():
     f.predict(fixed_protein_weights)
 
     ensemble_fig = f.plot(ensemble_xlim=[-100, 300], logicle=True)
-    # ensemble_fig.show()
-    fn = os.path.join(OUTPUT_DIR, f'fig S11{panel} {condition} ensembles.{EXPORT_FILE_TYPE}')
+    fn = os.path.join(OUTPUT_DIR, f'{fig_label}{panel} {condition} ensembles.{EXPORT_FILE_TYPE}')
     ensemble_fig.savefig(fn)
 
+    if fixed_protein in [None, 'BCL2']:
+      f.plot(ensemble_xlim=[-100, 300], logicle=True, survival_only=True, fig=survival_fig, label_prefix=condition)
+
     histogram_fig = plot_histograms_from_weights(parms, fixed_protein_weights)
-    # histogram_fig.show()
-    fn = os.path.join(OUTPUT_DIR, f'fig S11{panel} {condition} histograms.{EXPORT_FILE_TYPE}')
+    fn = os.path.join(OUTPUT_DIR, f'{fig_label}{panel} {condition} histograms.{EXPORT_FILE_TYPE}')
     histogram_fig.savefig(fn)
 
-  # Predict the effect of the combination
-  mcl1_inhf = get_or_calculate_inhibition_factor('1uM MCL1i')
-  bcl2_inhf = get_or_calculate_inhibition_factor('1uM BCL2i')
-  inhfs = {'MCL1': mcl1_inhf, 'BCL2': bcl2_inhf}
-  fixed_protein_weights = control_weights.copy()
-  fixed_protein_weights['BCL2'] *= inhfs['BCL2']
-  fixed_protein_weights['MCL1'] *= inhfs['MCL1']
+  fn = os.path.join(OUTPUT_DIR, f'{fig_label}g BCL2i.{EXPORT_FILE_TYPE}')
+  survival_fig.savefig(fn)
 
-  parms = get_parms(experiment)
-  condition = '1uM combination'
-  parms.set('condition', condition)
-  parms.set('fit_from_time', 48)
-  parms.validate(VALID_PARAMETERS)
-
-  f = EnsembleFit(parms)
-  f.predict(fixed_protein_weights)
-
-  panel = 'e'
-  ensemble_fig = f.plot(ensemble_xlim=[-100, 300], logicle=True)
-  # ensemble_fig.show()
-  fn = os.path.join(OUTPUT_DIR, f'fig S11{panel} {condition} ensembles.{EXPORT_FILE_TYPE}')
-  ensemble_fig.savefig(fn)
-
-  histogram_fig = plot_histograms_from_weights(parms, fixed_protein_weights)
-  # histogram_fig.show()
-  fn = os.path.join(OUTPUT_DIR, f'fig S11{panel} {condition} histograms.{EXPORT_FILE_TYPE}')
-  histogram_fig.savefig(fn)
-
-
-def plot_4a():
-  figs = [plt.subplots(nrows=1, ncols=1, figsize=(6, 6))[0] for _ in range(3)]
-  plots, _ = three_way_fit(survival_only=True, ensemble_figs=figs)
-  for experiment, plot in plots.items():
-    plot.savefig(os.path.join(OUTPUT_DIR, f'fig 4a - {experiment}.{EXPORT_FILE_TYPE}'))
-    # plot.show()
-
-def plot_S9():
+def plot_3_way(fig_label):
   ensemble_plots, histogram_plots = three_way_fit()
   for experiment, plot in ensemble_plots.items():
-    plot.savefig(os.path.join(OUTPUT_DIR, f'fig S9 ensemble - {experiment}.{EXPORT_FILE_TYPE}'))
-    # plot.show()
+    plot.savefig(os.path.join(OUTPUT_DIR, f'{fig_label} ensemble - {experiment}.{EXPORT_FILE_TYPE}'))
   for experiment, plot in histogram_plots.items():
-    plot.savefig(os.path.join(OUTPUT_DIR, f'fig S9 histograms - {experiment}.{EXPORT_FILE_TYPE}'))
-    # plot.show()
+    plot.savefig(os.path.join(OUTPUT_DIR, f'{fig_label} histograms - {experiment}.{EXPORT_FILE_TYPE}'))
 
 def plot_ratio_model(experiment, fig_name):
   fig, _ = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
@@ -570,60 +533,33 @@ def plot_ratio_model(experiment, fig_name):
 
   outfn = os.path.join(OUTPUT_DIR, f'{fig_name}.{EXPORT_FILE_TYPE}')
   fig.savefig(outfn)
-  # plt.show()
   plt.close()
 
-def plot_5(panel):
+def plot_drug_fitting(fig_label, panels):
   experiment = mr_95
   dasheses = [[(2, 2), (2, 2), (2, 2)], [(3, 3), (3, 3), (3, 3)], [(4, 4), (4, 4), (4, 4)]]
   label_prefixes = ['control', '0.1uM', '1uM']
-  fig, _ = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
+  conditions = ['0uM', '0.1uM MCL1i', '1uM MCL1i']
 
-  if panel == 'f':
-    conditions = ['0uM', '0.1uM MCL1i', '1uM MCL1i']
-    for condition, label_prefix, dashes in zip(conditions, label_prefixes, dasheses):
-      inhf = get_or_calculate_inhibition_factor(condition, experiment)
-      plot_drug_fit_for_condition(experiment,
-                                  inhf={'MCL1': inhf},
-                                  condition=condition,
-                                  fig=fig,
-                                  dashes=dashes,
-                                  label_prefix=label_prefix)
+  for condition, label_prefix, dashes, panel in zip(conditions, label_prefixes, dasheses, panels):
+    inhf = get_or_calculate_inhibition_factor(condition, experiment)
+    fig = plot_drug_fit_for_condition(experiment,
+                                inhf={'MCL1': inhf},
+                                condition=condition,
+                                dashes=dashes,
+                                label_prefix=label_prefix)
+    outfn = os.path.join(OUTPUT_DIR, f'{fig_label}{panel}.{EXPORT_FILE_TYPE}')
+    fig.savefig(outfn)
+    plt.close()
 
-  if panel == 'g':
-    conditions = ['0uM', '0.1uM BCL2i', '1uM BCL2i']
-    for condition, label_prefix, dashes in zip(conditions, label_prefixes, dasheses):
-      inhf = get_or_calculate_inhibition_factor(condition, experiment)
-      plot_drug_fit_for_condition(experiment,
-                                  inhf={'BCL2': inhf},
-                                  condition=condition,
-                                  fig=fig,
-                                  dashes=dashes,
-                                  label_prefix=label_prefix)
+def sensitivity(exp_name, mode='multiplication', fig_label='?'):
+  if mode == 'multiplication':
+    def _op(x, y): return x * y
+    wfr = np.arange(0, 10.1, 0.1)
+  else:
+    def _op(x, y): return x + y
+    wfr = np.arange(-5, 5.1, 0.1)
 
-  if panel == 'h':
-    conditions = ['0uM', '1uM combination']
-    label_prefixes = ['control', '1uM']
-    # Inhibition factors from the single drug, 1uM experiments
-    mcl1_inhf = get_or_calculate_inhibition_factor('1uM MCL1i')
-    bcl2_inhf = get_or_calculate_inhibition_factor('1uM BCL2i')
-    inhfs = [{}, {'MCL1': mcl1_inhf, 'BCL2': bcl2_inhf}]
-    for condition, inhf, label_prefix, dashes in zip(conditions, inhfs, label_prefixes, dasheses):
-      plot_drug_fit_for_condition(experiment,
-                                  inhf=inhf,
-                                  condition=condition,
-                                  fig=fig,
-                                  dashes=dashes,
-                                  label_prefix=label_prefix)
-    # Add the division 0 to this plot
-    sns.lineplot(data=mr_95.ex_div0, x='time', y='death', hue='source', ax=fig.axes[0])
-
-  outfn = os.path.join(OUTPUT_DIR, f'fig 5{panel}.{EXPORT_FILE_TYPE}')
-  fig.savefig(outfn)
-  # fig.show()
-  fig.close()
-
-def sensitivity(exp_name):
   if exp_name == '3 way':
     experiments = [mr_70, mr_92a, mr_2022_6]
   else:
@@ -631,7 +567,6 @@ def sensitivity(exp_name):
 
   weights = weights_from_experiment(exp_name)
 
-  wfr = np.arange(0, 10.1, 0.1)
   big_df = pd.DataFrame()
 
   for experiment in experiments:
@@ -644,7 +579,7 @@ def sensitivity(exp_name):
       parms.validate(VALID_PARAMETERS)
       fitter = EnsembleFit(parms)
       for wf in wfr:
-        these_weights[protein] = wf * weights[protein]
+        these_weights[protein] = _op(wf, weights[protein])
         weight_vector = [these_weights[p] for p in PROTEINS]
         fitter.predict(these_weights)
         wt_e = fitter.wt_error()
@@ -654,13 +589,13 @@ def sensitivity(exp_name):
         hg_e = fitter.histogram_error(weight_vector, None, fitter.ko_protein_levels)
         hg_errors.append(hg_e)
       df_hg = pd.DataFrame({'weight variation': wfr, 'error': hg_errors, 'source': 'histogram'})
-      df_hg['experiment'] = experiment
+      df_hg['experiment'] = exp_name
       df_hg['protein']    = protein
       df_ko = pd.DataFrame({'weight variation': wfr, 'error': ko_errors, 'source': 'KO'})
-      df_ko['experiment'] = experiment
+      df_ko['experiment'] = exp_name
       df_ko['protein']    = protein
       df_wt = pd.DataFrame({'weight variation': wfr, 'error': wt_errors, 'source': 'WT'})
-      df_wt['experiment'] = experiment
+      df_wt['experiment'] = exp_name
       df_wt['protein']    = protein
       big_df = pd.concat([big_df, df_wt, df_ko, df_hg])
 
@@ -680,72 +615,71 @@ def sensitivity(exp_name):
 
   source = 'histogram'
   _, ax = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
-  df = big_df[(big_df['source'] == source) & (big_df['experiment'] == 'combined')]
+  df = big_df[(big_df['source'] == source) & (big_df['experiment'] == ('combined' if exp_name == '3 way' else exp_name))]
   ax = sns.lineplot(data=df, x='weight variation', y='error', hue='protein', ax=ax)
-  title = f'combined - {source} error'
+  title = f'{exp_name} - {mode} - {source} error'
   ax.set_title(title)
-  fn = os.path.join(OUTPUT_DIR, f'fig 4c.{EXPORT_FILE_TYPE}')
+  fn = os.path.join(OUTPUT_DIR, f'{fig_label} - {exp_name} - {mode}.{EXPORT_FILE_TYPE}')
   plt.savefig(fn)
-  # plt.show()
   plt.close()
 
 def figure_routing(fig):
   if fig == '3':
+    # Fit the 'hero' experiment and generate plots.
     single_fit(mr_2022_6, label={'ensembles': f'fig 3ce', 'histograms': f'fig 3f'})
     vary_protein_list(mr_2022_6, 'fig 3g')
-    plot_ratio_model(mr_2022_6, 'fig 3h')
+    sensitivity(mr_2022_6.name, mode='addition', fig_label='fig 3h')
     return 0
 
   if fig == '4':
-    plot_4a()
-    sensitivity('3 way')
+    # Fit the drug experiments
+    plot_drug_fitting(fig_label='fig 4', panels=['c', 'd', 'e'])
     return 0
 
   if fig == '5':
-    single_fit(mr_95, label={'ensembles': 'fig 5bd', 'histograms': 'fig 5e'}, fit_from_time=48)
-    plot_5('f')
-    plot_5('g')
-    plot_5('h')
-    return 0
-
-  if fig == '6':
+    # T cells
     single_fit(mr_2022_11,
-               label={'ensembles': 'fig 6de', 'histograms': 'fig 6f'},
+               label={'ensembles': 'fig 5df', 'histograms': 'fig 5g'},
                fit_from_time=96,
                normalise_method='PI stain')
     return 0
 
-  if fig == 'S6':
-    single_fit(mr_70, label={'ensembles': 'fig S6a1', 'histograms': 'fig S6a2'})
-    single_fit(mr_92a, label={'ensembles': 'fig S6b1', 'histograms': 'fig S6b2'})
+  if fig == 'S3':
+    # Additional experiments:
+    # 1. MR-70
+    single_fit(mr_70, label={'ensembles': 'fig S3a1', 'histograms': 'fig S3a2'})
+    vary_protein_list(mr_70, 'fig S3b')
+    sensitivity(mr_70.name, mode='addition', fig_label='fig S3c')
+    #
+    # # 2. MR-92a
+    single_fit(mr_92a, label={'ensembles': 'fig S3d1', 'histograms': 'fig S3d2'})
+    vary_protein_list(mr_92a, 'fig S3e')
+    sensitivity(mr_92a.name, mode='addition', fig_label='fig S3f')
+
+    # 3. Three simultaneous experiments
+    plot_3_way(fig_label='fig S3ghij')
+    sensitivity('3 way', mode='addition', fig_label='fig S3l')
+
     return 0
 
-  if fig == 'S7':
-    vary_protein_list(mr_92a, 'fig S7a')
-    vary_protein_list(mr_70, 'fig S7b')
-    return 0
-
-  if fig == 'S8':
+  if fig == 'S4':
+    # The ratio ensemble model
     single_fit(mr_2022_6,
-               label={'ensembles': 'fig S8a1', 'histograms': 'fig S8a2'},
+               label={'ensembles': 'fig S4a1', 'histograms': 'fig S4a2'},
                model_type='ratio')
-    plot_ratio_model(mr_2022_6, 'fig S8a3')
+    plot_ratio_model(mr_2022_6, 'fig S4a3')
     single_fit(mr_70,
-               label={'ensembles': 'fig S8b1', 'histograms': 'fig S8b2'},
+               label={'ensembles': 'fig S4b1', 'histograms': 'fig S4b2'},
                model_type='ratio')
-    plot_ratio_model(mr_70, 'fig S8b3')
+    plot_ratio_model(mr_70, 'fig S4b3')
     single_fit(mr_92a,
-               label={'ensembles': 'fig S8c1', 'histograms': 'fig S8c2'},
+               label={'ensembles': 'fig S4c1', 'histograms': 'fig S4c2'},
                model_type='ratio')
-    plot_ratio_model(mr_92a, 'fig S8c3')
+    plot_ratio_model(mr_92a, 'fig S4c3')
     return 0
 
-  if fig == 'S9':
-    plot_S9()
-    return 0
-
-  if fig == 'S11':
-    plot_S11()
+  if fig == 'S5':
+    plot_all_drug_fits(fig_label='fig S5')
     return 0
 
   print('Unrecognised figure')
