@@ -24,6 +24,7 @@ Figure output is placed in the `outputs` directory.
 
 After fitting a model to data, the weights are cached in `outputs/weights-cache.json`. This is important because some weights are reused for several plots. This also provides a significant performance boost when rerunning, for example, when modifying plots. The weights for a particular run can be inspected here as well. Because of the stochastic nature of the fitting algorithm, weights will vary from run to run. The weights used in the paper are in the file `paper-weights.json`. To reproduce the exact plots presented in the paper, copy this file to `outputs/weights-cache.json`.
 
-Drug inhibition factors reported here, and used internally in the code, are (1-ih) for the inhibition factors reported in the paper.
+Drug inhibition factors reported here, and used internally in the code, are (`1-ih`) for the inhibition factors reported in the paper.
 
+Data for non-computational figures are in the Excel spreadsheet file `Data for additional figures.xlsx'`
 
