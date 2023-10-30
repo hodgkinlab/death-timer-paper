@@ -2,7 +2,7 @@
 
 This repository is a companion to "A protein ensemble threshold model predicts lymphocyte death time" by Ruhle, et al 2023. It consists of the data presented in that paper and the code to reproduce fits to the Ensemble and Threshold (ET) model.
 
-The code is based on python 3.10 but should work with 3.9 and later versions. The specific modules used are documented in `requirements.txt` but, again, the code should not be dependent on the precise version of these modules.
+The code is based on python 3.10 but should work with 3.9 and later versions. The specific modules used are documented in `requirements.txt` but, again, the code should not be dependent on the precise version of these modules. Install as per any other python software, the recommeded method would be to use conda or a virtual environment. Installation should take a couple of minutes.
 
 To generate a figure:
 ```
