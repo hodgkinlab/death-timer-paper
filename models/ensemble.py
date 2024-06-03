@@ -11,13 +11,11 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-from data_loading.loader import PROTEINS
 from models.model import Model
 
 class EnsembleModel(Model):
   name = None
   THRESHOLD = 10
-  # THRESHOLD = 40000
 
   @staticmethod
   def apply_ensemble(df, parms, weight_dict):

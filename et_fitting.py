@@ -10,8 +10,8 @@ import pandas as pd
 import seaborn as sns
 from scipy import stats
 
-from data.experiments import experiment_validator, mr_70, mr_2022_6, mr_92a, experiment_from_name, mr_95, mr_2022_8, \
-  mr_2022_11
+from data.experiments import experiment_validator, mr_70, mr_2022_6, mr_92a, experiment_from_name, mr_95, \
+  mr_2022_11, mr_2023_12, mr_2023_13, mr_2023_14, mr_2023_5_unstim
 from data_loading.counts import NORMALISE_METHODS
 from data_loading.experiments import TcellExperiment, Experiment
 from data_loading.loader import PROTEINS, protein_validator
@@ -23,7 +23,8 @@ from parameters.parameters import Parameters
 EXPORT_FILE_TYPE = 'pdf'
 OUTPUT_DIR = 'outputs'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-EXPERIMENTS = [mr_70, mr_92a, mr_2022_6]
+THREE_WAY_EXPERIMENTS = [mr_2023_12, mr_2023_13, mr_2023_14]
+
 
 # This is dictionary of function used to validate a parameter dictionary
 VALID_PARAMETERS = {
@@ -115,7 +116,7 @@ def _kde_for(df):
 
   return kde_frame
 
-def plot_histograms_from_weights(parms, weights):
+def plot_histograms_from_weights(parms, weights, xlim=None):
   # The parms object contains:
   # - the experiment
   # - parameters for data handling
@@ -200,6 +201,8 @@ def plot_histograms_from_weights(parms, weights):
       sns.lineplot(data=kdep, x='x', y='level', hue='source', style='source', dashes=dashes, palette=palette, legend=legend, ax=ax)
       ax.set_xlabel(None)
       ax.set(xscale='log')
+      if xlim:
+        ax.set_xlim(xlim[0], xlim[1])
 
       legend = False
       if set_ylabel:
@@ -277,8 +280,8 @@ def single_fit(exp,
     print('Using provided weights')
 
   f.predict(weights)
-  ensemble_fig = f.plot(ensemble_xlim=[-100, 300], logicle=True, xscale_data=xscale_data)
-  histogram_fig = plot_histograms_from_weights(parms, weights)
+  ensemble_fig = f.plot(ensemble_xlim=exp.ensemble_xlim_hint(), logicle=True, xscale_data=xscale_data)
+  histogram_fig = plot_histograms_from_weights(parms, weights, xlim=exp.histogram_xlim_hint())
 
   if type(label) == dict:
     e_label = label['ensembles']
@@ -371,7 +374,7 @@ def make_multi_fitter():
   # Make a fitter object for fitting several experiments simultaneously
   # to data with the same parameters.
   parm_set = []
-  for exp in EXPERIMENTS:
+  for exp in THREE_WAY_EXPERIMENTS:
     p = get_parms(exp)
     p.set('label', f'{exp.name} - 3 way fit')
     parm_set.append(p)
@@ -561,7 +564,7 @@ def sensitivity(exp_name, mode='multiplication', fig_label='?'):
     wfr = np.arange(-5, 5.1, 0.1)
 
   if exp_name == '3 way':
-    experiments = [mr_70, mr_92a, mr_2022_6]
+    experiments = THREE_WAY_EXPERIMENTS
   else:
     experiments = [experiment_from_name(exp_name)]
 
@@ -650,7 +653,7 @@ def figure_routing(fig):
     single_fit(mr_70, label={'ensembles': 'fig S3a1', 'histograms': 'fig S3a2'})
     vary_protein_list(mr_70, 'fig S3b')
     sensitivity(mr_70.name, mode='addition', fig_label='fig S3c')
-    #
+
     # # 2. MR-92a
     single_fit(mr_92a, label={'ensembles': 'fig S3d1', 'histograms': 'fig S3d2'})
     vary_protein_list(mr_92a, 'fig S3e')
@@ -682,6 +685,12 @@ def figure_routing(fig):
     plot_all_drug_fits(fig_label='fig S5')
     return 0
 
+  if fig == 'Unstim B':
+    single_fit(mr_2023_5_unstim,
+               label={'ensembles': 'fig unstim b ensembles', 'histograms': 'fig unstim b histogram'},
+               fit_from_time=1)
+    return 0
+
   print('Unrecognised figure')
   return 1
 
@@ -690,3 +699,4 @@ if __name__ == '__main__':
   if opts.figure is not None:
     rc = figure_routing(opts.figure)
     quit(rc)
+

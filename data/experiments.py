@@ -58,7 +58,29 @@ survival_parameters = {
 }
 mr_2022_8 = BcellExperiment('MR2022.8', 144, 144, default_condition='0uM', available_conditions=ac, survival_parameters=survival_parameters)
 
-B_EXPERIMENTS = [mr_70, mr_92a, mr_95, mr_2022_6, mr_2022_8]
+mr_2023_5_unstim = BcellExperiment('MR2023.5 unstimulated', 71, 71, directory='MR2023.5',
+                                   survival_parameters={'-': {'survival_mean': 3.484729434570168, 'survival_std': 0.962686659822257}},
+                                   ensemble_xlim_hint=[-1e3, 1e3])
+
+survival_parameters = {'stimulated': {'survival_mean': 4.757030480861173, 'survival_std': 0.48091217875822234},
+                  'unstimulated': {'survival_mean': 3.062947118371283, 'survival_std': 1.0752873419882492}}
+mr_2023_12 = BcellExperiment('MR23.12', 999, 999, available_conditions=['stimulated', 'unstimulated'],
+                             default_condition='stimulated', directory='MR-23.12', survival_parameters=survival_parameters.copy(),
+                             ensemble_xlim_hint=[-1e7, 1e7])
+
+survival_parameters = {'stimulated': {'survival_mean': 4.7387811172670204, 'survival_std': 0.5668107030944444},
+                  'unstimulated': {'survival_mean': 3.2930707696948596, 'survival_std': 0.9536752607617667}}
+mr_2023_13 = BcellExperiment('MR23.13', 999, 999, available_conditions=['stimulated', 'unstimulated'],
+                             default_condition='stimulated', directory='MR-23.13', survival_parameters=survival_parameters.copy(),
+                             ensemble_xlim_hint=[-1e7, 1e7])
+
+survival_parameters = {'stimulated': {'survival_mean': 4.734195069055054, 'survival_std': 0.5598017443823999},
+                  'unstimulated': {'survival_mean': 3.3779371699357523, 'survival_std': 0.8671460101299735}}
+mr_2023_14 = BcellExperiment('MR23.14', 999, 999, available_conditions=['stimulated', 'unstimulated'],
+                             default_condition='stimulated', directory='MR-23.14', survival_parameters=survival_parameters.copy(),
+                             ensemble_xlim_hint=[-1e7, 1e7])
+
+B_EXPERIMENTS = [mr_70, mr_92a, mr_95, mr_2022_6, mr_2022_8, mr_2023_5_unstim, mr_2023_12, mr_2023_13, mr_2023_14]
 
 mr_2022_11  = TcellExperiment('MR2022.11', 144, 144, default_condition='96h wash', directory='MR2022.11')
 T_EXPERIMENTS = [mr_2022_11]

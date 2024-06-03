@@ -5,7 +5,6 @@ Subclass of Fit for fitting ensemble models. Most of the effort goes into
 - Making nice plots
 """
 import math
-import pickle
 
 import numpy as np
 import pandas as pd
@@ -44,7 +43,7 @@ class EnsembleFit(Fit):
     self.wt_protein_levels = wt_protein_levels
     self.times = ko_protein_levels['time'].unique()
 
-    # Extract a store counts in the protein level data (all protein counts are the same so use BIM)
+    # Extract and store counts in the protein level data (all protein counts are the same so use BIM)
     df = ko_protein_levels.groupby(['time'])['BIM'].count()
     df = df.to_frame()
     df.reset_index(inplace=True)

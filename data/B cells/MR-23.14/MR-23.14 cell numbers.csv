@@ -1,0 +1,133 @@
+﻿time,replicate,genotype,counts,cohort number,condition
+0,1,BaxBak KO,3803,3443,stimulated
+12,1,BaxBak KO,3749,3406,stimulated
+24,1,BaxBak KO,3734,3440,stimulated
+30,1,BaxBak KO,3674,3360,stimulated
+36,1,BaxBak KO,4043,3541,stimulated
+48,1,BaxBak KO,6126,2861,stimulated
+60,1,BaxBak KO,17240,3326,stimulated
+72,1,BaxBak KO,28674,3284,stimulated
+84,1,BaxBak KO,37957,3661,stimulated
+96,1,BaxBak KO,39846,3743,stimulated
+120,1,BaxBak KO,46797,3465,stimulated
+142,1,BaxBak KO,44003,3400,stimulated
+167,1,BaxBak KO,44414,3238,stimulated
+0,2,BaxBak KO,3874,3483,stimulated
+12,2,BaxBak KO,3829,3500,stimulated
+24,2,BaxBak KO,4071,3777,stimulated
+30,2,BaxBak KO,4040,3677,stimulated
+36,2,BaxBak KO,4243,3728,stimulated
+48,2,BaxBak KO,6329,2841,stimulated
+60,2,BaxBak KO,17249,3374,stimulated
+72,2,BaxBak KO,27866,3202,stimulated
+84,2,BaxBak KO,37400,3434,stimulated
+96,2,BaxBak KO,40517,3759,stimulated
+120,2,BaxBak KO,45091,3623,stimulated
+142,2,BaxBak KO,45703,3219,stimulated
+167,2,BaxBak KO,43054,3170,stimulated
+0,3,BaxBak KO,3714,3374,stimulated
+12,3,BaxBak KO,3643,3317,stimulated
+24,3,BaxBak KO,3740,3409,stimulated
+30,3,BaxBak KO,3831,3489,stimulated
+36,3,BaxBak KO,3934,3454,stimulated
+48,3,BaxBak KO,6483,2973,stimulated
+60,3,BaxBak KO,16786,3241,stimulated
+72,3,BaxBak KO,28057,3334,stimulated
+84,3,BaxBak KO,35491,3287,stimulated
+96,3,BaxBak KO,41777,3813,stimulated
+120,3,BaxBak KO,46691,3681,stimulated
+142,3,BaxBak KO,45174,3349,stimulated
+167,3,BaxBak KO,44100,3353,stimulated
+0,1,WT,3949,3903,stimulated
+12,1,WT,4080,4043,stimulated
+24,1,WT,4031,4017,stimulated
+30,1,WT,4120,4103,stimulated
+36,1,WT,4009,3362,stimulated
+48,1,WT,9814,3047,stimulated
+60,1,WT,31529,3887,stimulated
+72,1,WT,46823,3347,stimulated
+84,1,WT,49611,2981,stimulated
+96,1,WT,47671,2698,stimulated
+120,1,WT,36791,1767,stimulated
+142,1,WT,26100,1297,stimulated
+167,1,WT,13491,798,stimulated
+0,2,WT,4151,4111,stimulated
+12,2,WT,3866,3797,stimulated
+24,2,WT,3771,3751,stimulated
+30,2,WT,3866,3829,stimulated
+36,2,WT,4054,3401,stimulated
+48,2,WT,9086,2862,stimulated
+60,2,WT,31469,3702,stimulated
+72,2,WT,47820,3409,stimulated
+84,2,WT,50223,3041,stimulated
+96,2,WT,47674,2618,stimulated
+120,2,WT,37697,1791,stimulated
+142,2,WT,25840,1270,stimulated
+167,2,WT,15060,898,stimulated
+0,3,WT,4054,4014,stimulated
+12,3,WT,4103,4026,stimulated
+24,3,WT,3954,3951,stimulated
+30,3,WT,3726,3714,stimulated
+36,3,WT,4283,3618,stimulated
+48,3,WT,9437,2953,stimulated
+60,3,WT,30763,3723,stimulated
+72,3,WT,46717,3428,stimulated
+84,3,WT,50283,2888,stimulated
+96,3,WT,47109,2661,stimulated
+120,3,WT,37906,1785,stimulated
+142,3,WT,32131,1248,stimulated
+167,3,WT,19657,915,stimulated
+0,1,BaxBak KO,4171,3823,unstimulated
+12,1,BaxBak KO,3697,3369,unstimulated
+24,1,BaxBak KO,3831,3543,unstimulated
+30,1,BaxBak KO,4171,3806,unstimulated
+36,1,BaxBak KO,3711,3436,unstimulated
+48,1,BaxBak KO,3677,3355,unstimulated
+60,1,BaxBak KO,3569,3220,unstimulated
+72,1,BaxBak KO,3706,3353,unstimulated
+84,1,BaxBak KO,3626,3302,unstimulated
+0,2,BaxBak KO,3851,3537,unstimulated
+12,2,BaxBak KO,3760,3440,unstimulated
+24,2,BaxBak KO,3623,3257,unstimulated
+30,2,BaxBak KO,3774,3440,unstimulated
+36,2,BaxBak KO,3823,3504,unstimulated
+48,2,BaxBak KO,3500,3143,unstimulated
+60,2,BaxBak KO,3554,3258,unstimulated
+72,2,BaxBak KO,3823,3516,unstimulated
+84,2,BaxBak KO,3257,2966,unstimulated
+0,3,BaxBak KO,4211,3869,unstimulated
+12,3,BaxBak KO,3711,3323,unstimulated
+24,3,BaxBak KO,3669,3366,unstimulated
+30,3,BaxBak KO,4309,3977,unstimulated
+36,3,BaxBak KO,3683,3358,unstimulated
+48,3,BaxBak KO,3646,3324,unstimulated
+60,3,BaxBak KO,3531,3240,unstimulated
+72,3,BaxBak KO,3740,3445,unstimulated
+84,3,BaxBak KO,3760,3412,unstimulated
+0,1,WT,4220,4191,unstimulated
+12,1,WT,3229,3163,unstimulated
+24,1,WT,2446,2426,unstimulated
+30,1,WT,2451,2434,unstimulated
+36,1,WT,1826,1752,unstimulated
+48,1,WT,1391,1300,unstimulated
+60,1,WT,954,870,unstimulated
+72,1,WT,649,533,unstimulated
+84,1,WT,414,364,unstimulated
+0,2,WT,4077,4051,unstimulated
+12,2,WT,3377,3329,unstimulated
+24,2,WT,2397,2391,unstimulated
+30,2,WT,2446,2429,unstimulated
+36,2,WT,1683,1601,unstimulated
+48,2,WT,1246,1160,unstimulated
+60,2,WT,814,744,unstimulated
+72,2,WT,554,505,unstimulated
+84,2,WT,374,340,unstimulated
+0,3,WT,4280,4246,unstimulated
+12,3,WT,3320,3266,unstimulated
+24,3,WT,2371,2366,unstimulated
+30,3,WT,2491,2474,unstimulated
+36,3,WT,1774,1708,unstimulated
+48,3,WT,1246,1164,unstimulated
+60,3,WT,791,733,unstimulated
+72,3,WT,509,467,unstimulated
+84,3,WT,283,231,unstimulated
