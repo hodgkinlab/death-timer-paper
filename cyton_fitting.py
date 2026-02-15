@@ -13,10 +13,10 @@ import matplotlib.pyplot as plt
 rng = np.random.RandomState(seed=89907530)
 
 FIGURE_MAP = {
-  'MR-55 BCL2i Cohort template': 'fig 1b',
-  'MR-55 MCL1i Cohort template': 'fig 1c',
-  'MR-55 BCLxLi Cohort template': 'fig 1d',
-  'MR-60 BIM ko Cohort template': 'fig 1e'
+  'MR-55 BCL2i Cohort template': 'fig S1c',
+  'MR-55 MCL1i Cohort template': 'fig 1b',
+  'MR-55 BCLxLi Cohort template': 'fig S1d',
+  'MR-60 BIM ko Cohort template': 'fig 1c'
 }
 
 OUTPUT = 'outputs'

@@ -8,7 +8,9 @@ FIGURES = {
   '5': 'et_fitting',
   'S3': 'et_fitting',
   'S4': 'et_fitting',
-  'S5': 'et_fitting'
+  'S5': 'et_fitting',
+  'S6': 'et_fitting',
+  'S7': 'et_fitting'
 }
 
 def parse_args():

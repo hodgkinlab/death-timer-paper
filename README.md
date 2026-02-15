@@ -1,10 +1,10 @@
 # Code for fitting the Ensemble and Threshold model to data
 
-This repository is a companion to "A protein ensemble threshold model predicts lymphocyte death time" by Ruhle, et al 2023. [Click this link to read the bioXriv pre-print](https://www.biorxiv.org/content/10.1101/2023.10.25.563681). 
+If you are looking for the code that is a companion to "A protein ensemble threshold model predicts lymphocyte death time" by Ruhle, et al 2023 use commit 9776bdb. [Click this link to read the bioXriv pre-print](https://www.biorxiv.org/content/10.1101/2023.10.25.563681). 
 
 This repository consists of the data presented in that paper and the code to reproduce fits to the Ensemble and Threshold (ET) model. 
 
-The code is based on python 3.10 but should work with 3.9 and later versions. The specific modules used are documented in `requirements.txt` but, again, the code should not be dependent on the precise version of these modules. Install as per any other python software, the recommeded method would be to use conda or a virtual environment. Installation should take a couple of minutes.
+The code is based on python 3.10 but should work with 3.9 and later versions. The specific modules used are documented in `requirements.txt` but, again, the code should not be dependent on the precise version of these modules. Install as per any other python software, the recommended method would be to use conda or a virtual environment. Installation should take a couple of minutes.
 
 To generate a figure:
 ```
@@ -20,7 +20,7 @@ To generate all figures:
 ```
 python generate_figure.py --figures all
 ```
-Fitting and generating all figures will take ~2 hours on a recent Mac laptop. Figures will not match the exact layout in the paper.
+Fitting and generating all figures will take ~2 hours on a recent Mac laptop. Figures will not match the layout in the paper.
 
 Figure output is placed in the `outputs` directory.
 

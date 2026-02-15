@@ -293,9 +293,10 @@ def single_fit(exp,
   fn = os.path.join(OUTPUT_DIR, f'{e_label}.{EXPORT_FILE_TYPE}')
   ensemble_fig.savefig(fn)
   plt.close()
-  fn = os.path.join(OUTPUT_DIR, f'{h_label}.{EXPORT_FILE_TYPE}')
-  histogram_fig.savefig(fn)
-  plt.close()
+  if h_label is not None:
+    fn = os.path.join(OUTPUT_DIR, f'{h_label}.{EXPORT_FILE_TYPE}')
+    histogram_fig.savefig(fn)
+    plt.close()
 
   return 0
 
@@ -456,9 +457,6 @@ def vary_protein_list(experiment, fig_name):
 
     df.loc[len(df.index)] = [label, experiment.name, result['error'], result['WT error'], result['KO error']]
 
-  # fn = os.path.join(OUTPUT_DIR, 'protein contributions.csv')
-  # df.to_csv(fn)
-
   # Make a column which is the number of proteins
   def _n_proteins(row):
     l = row['protein list']
@@ -474,16 +472,13 @@ def vary_protein_list(experiment, fig_name):
     plt.close()
 
 
-def plot_all_drug_fits(fig_label='?'):
+def plot_drug_fittting_histograms(fig_label='?', conditions=None, panels=None, fixed_proteins=None):
   experiment = mr_95
 
   parms = get_parms(experiment)
   f = EnsembleFit(parms)
   control_weights = get_or_calculate_weights(f, experiment)
-
-  conditions = ['0uM', '0.1uM MCL1i', '1uM MCL1i', '0.1uM BCL2i', '1uM BCL2i']
-  fixed_proteins = [None, 'MCL1', 'MCL1', 'BCL2', 'BCL2']
-  panels = ['c', 'e', 'f', 'j', 'k']
+  
   survival_fig, _ = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
   for condition, fixed_protein, panel in zip(conditions, fixed_proteins, panels):
     inhf = get_or_calculate_inhibition_factor(condition, experiment)
@@ -499,10 +494,6 @@ def plot_all_drug_fits(fig_label='?'):
     f = EnsembleFit(parms)
     f.predict(fixed_protein_weights)
 
-    ensemble_fig = f.plot(ensemble_xlim=[-100, 300], logicle=True)
-    fn = os.path.join(OUTPUT_DIR, f'{fig_label}{panel} {condition} ensembles.{EXPORT_FILE_TYPE}')
-    ensemble_fig.savefig(fn)
-
     if fixed_protein in [None, 'BCL2']:
       f.plot(ensemble_xlim=[-100, 300], logicle=True, survival_only=True, fig=survival_fig, label_prefix=condition)
 
@@ -510,8 +501,6 @@ def plot_all_drug_fits(fig_label='?'):
     fn = os.path.join(OUTPUT_DIR, f'{fig_label}{panel} {condition} histograms.{EXPORT_FILE_TYPE}')
     histogram_fig.savefig(fn)
 
-  fn = os.path.join(OUTPUT_DIR, f'{fig_label}g BCL2i.{EXPORT_FILE_TYPE}')
-  survival_fig.savefig(fn)
 
 def plot_3_way(fig_label):
   ensemble_plots, histogram_plots = three_way_fit()
@@ -538,16 +527,14 @@ def plot_ratio_model(experiment, fig_name):
   fig.savefig(outfn)
   plt.close()
 
-def plot_drug_fitting(fig_label, panels):
+def plot_drug_fitting_ensemble(fig_label, panels, conditions=None, label_prefixes=None, protein=None):
   experiment = mr_95
   dasheses = [[(2, 2), (2, 2), (2, 2)], [(3, 3), (3, 3), (3, 3)], [(4, 4), (4, 4), (4, 4)]]
-  label_prefixes = ['control', '0.1uM', '1uM']
-  conditions = ['0uM', '0.1uM MCL1i', '1uM MCL1i']
 
   for condition, label_prefix, dashes, panel in zip(conditions, label_prefixes, dasheses, panels):
     inhf = get_or_calculate_inhibition_factor(condition, experiment)
     fig = plot_drug_fit_for_condition(experiment,
-                                inhf={'MCL1': inhf},
+                                inhf={protein: inhf},
                                 condition=condition,
                                 dashes=dashes,
                                 label_prefix=label_prefix)
@@ -636,60 +623,58 @@ def figure_routing(fig):
 
   if fig == '4':
     # Fit the drug experiments
-    plot_drug_fitting(fig_label='fig 4', panels=['c', 'd', 'e'])
+    label_prefixes = ['control', '0.1uM', '1uM']
+    conditions = ['0uM', '0.1uM MCL1i', '1uM MCL1i']
+    plot_drug_fitting_ensemble(fig_label='fig 4', panels=['c', 'd', 'e'], conditions=conditions, label_prefixes=label_prefixes, protein='MCL1')
     return 0
 
   if fig == '5':
     # T cells
+    single_fit(mr_2023_5_unstim,
+               label={'ensembles': 'fig 5ab', 'histograms': 'fig S7c'},
+               fit_from_time=1)
     single_fit(mr_2022_11,
-               label={'ensembles': 'fig 5df', 'histograms': 'fig 5g'},
+               label={'ensembles': 'fig 5cd', 'histograms': 'fig S7h'},
                fit_from_time=96,
                normalise_method='PI stain')
     return 0
 
   if fig == 'S3':
-    # Additional experiments:
-    # 1. MR-70
-    single_fit(mr_70, label={'ensembles': 'fig S3a1', 'histograms': 'fig S3a2'})
-    vary_protein_list(mr_70, 'fig S3b')
-    sensitivity(mr_70.name, mode='addition', fig_label='fig S3c')
-
-    # # 2. MR-92a
-    single_fit(mr_92a, label={'ensembles': 'fig S3d1', 'histograms': 'fig S3d2'})
-    vary_protein_list(mr_92a, 'fig S3e')
-    sensitivity(mr_92a.name, mode='addition', fig_label='fig S3f')
-
     # 3. Three simultaneous experiments
-    plot_3_way(fig_label='fig S3ghij')
-    sensitivity('3 way', mode='addition', fig_label='fig S3l')
+    plot_3_way(fig_label='fig S3adef')
+    sensitivity('3 way', mode='addition', fig_label='fig S3c')
 
     return 0
 
   if fig == 'S4':
     # The ratio ensemble model
     single_fit(mr_2022_6,
-               label={'ensembles': 'fig S4a1', 'histograms': 'fig S4a2'},
+               label={'ensembles': None, 'histograms': 'fig S4c'},
                model_type='ratio')
-    plot_ratio_model(mr_2022_6, 'fig S4a3')
-    single_fit(mr_70,
-               label={'ensembles': 'fig S4b1', 'histograms': 'fig S4b2'},
-               model_type='ratio')
-    plot_ratio_model(mr_70, 'fig S4b3')
-    single_fit(mr_92a,
-               label={'ensembles': 'fig S4c1', 'histograms': 'fig S4c2'},
-               model_type='ratio')
-    plot_ratio_model(mr_92a, 'fig S4c3')
+    plot_ratio_model(mr_2022_6, 'fig S4a')
     return 0
 
   if fig == 'S5':
-    plot_all_drug_fits(fig_label='fig S5')
+    # MCL1-i
+    conditions = ['0uM', '0.1uM MCL1i', '1uM MCL1i']
+    fixed_proteins = [None, 'MCL1', 'MCL1']
+    panels = ['c', 'd', 'e']
+    plot_drug_fittting_histograms(fig_label='fig S5', conditions=conditions, fixed_proteins=fixed_proteins, panels=panels)
+    return 0
+    
+  if fig == 'S6':
+    label_prefixes = ['control', '0.1uM', '1uM']
+    conditions = ['0uM', '0.1uM BCL2i', '1uM BCL2i']
+    plot_drug_fitting_ensemble(fig_label='fig S6', panels=['de1', 'de2', 'df3'], conditions=conditions, label_prefixes=label_prefixes, protein='BCL2')
+
+    fixed_proteins = [None, 'BCL2', 'BCL2']
+    panels = ['', 'e2', 'f2']
+    plot_drug_fittting_histograms(fig_label='fig S6', conditions=conditions, fixed_proteins=fixed_proteins, panels=panels)
     return 0
 
-  if fig == 'Unstim B':
-    single_fit(mr_2023_5_unstim,
-               label={'ensembles': 'fig unstim b ensembles', 'histograms': 'fig unstim b histogram'},
-               fit_from_time=1)
-    return 0
+  if fig == 'S7':
+    return figure_routing('5')
+
 
   print('Unrecognised figure')
   return 1
